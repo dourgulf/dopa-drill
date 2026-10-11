@@ -321,6 +321,8 @@ function activate(k) {
 
 // ---------------------------------------------------------------- flow
 function startGame(kind = 'level', arg) {
+  // An empty review would open a play screen with no problem to answer.
+  if (kind === 'review' && !progress().review.length) return;
   audio.unlock();
   S.run += 1;
   if (S.bonusOpen) { $('#bonus').hidden = true; S.bonusOpen = false; }
@@ -1150,7 +1152,8 @@ function showResult() {
   un.classList.toggle('yes', ok);
   $('#go-extra').hidden = !ok;
   $('#go-extra small').textContent = `${Math.round(EXTRA_MS / 1000)}秒`;
-  $('#go-again').hidden = ok;
+  // A review that cleared the whole list has nothing left to replay.
+  $('#go-again').hidden = ok || (review && !progress().review.length);
   renderSkillNews($('#r-skills'));
   renderGrowth($('#r-growth'));
   renderQuestMini($('#r-quests'));
