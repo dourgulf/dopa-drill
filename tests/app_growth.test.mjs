@@ -37,6 +37,20 @@ test('solves, plays and extras add up; days count once (id033)', () => {
   assert.deepEqual([s.plays, s.modes.level, s.perfects, s.playMs, s.bestDopaL, s.days], [2, 2, 1, 10000, 5.5, 1]);
 });
 
+test('grade plays are counted per grade and earn the grade trophies (id067)', async () => {
+  const { trophyMetrics, evaluate } = await import('../app/js/trophies.js');
+  const s = emptyStats();
+  notePlay(s, { mode: 'grade', grade: 3, day: '2026-10-12', timeMs: 5000, dopaL: 3, firstRate: 1 });
+  notePlay(s, { mode: 'grade', grade: 3, day: '2026-10-12', timeMs: 5000, dopaL: 3, firstRate: 1 });
+  notePlay(s, { mode: 'grade', grade: 1, day: '2026-10-12', timeMs: 5000, dopaL: 3, firstRate: 1 });
+  notePlay(s, { mode: 'level', grade: 5, day: '2026-10-12', timeMs: 5000, dopaL: 3, firstRate: 1 });
+  assert.deepEqual(s.grades, { 1: 1, 3: 2 }); // only the grade mode counts
+  const state = { init: true, got: {} };
+  const fresh = evaluate(state, trophyMetrics({ stats: s }), 1).map((t) => t.id);
+  assert.ok(fresh.includes('grade3-1') && fresh.includes('grade1-1'), fresh.join());
+  assert.ok(!fresh.includes('grade3-10') && !fresh.includes('grade2-1'), fresh.join());
+});
+
 test('compared with before: only improvements, enough answers, at most three (id038)', async () => {
   const { compareSkill, growthLines } = await import('../app/js/growth.js');
   const r = {

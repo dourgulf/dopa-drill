@@ -1142,7 +1142,7 @@ function showResult() {
   const ok = rate >= 0.8 && !review;
   if (S.plan.placement && !S.demo) { progress().placed = true; store.save(); }
   S.record = S.demo ? null : store.addRecord({ mode: S.plan.mode, grade: S.plan.grade, skill: S.plan.skill, count: S.N, score: BASIC_SCORE, ok: S.solved, ng: S.misses, firstRate: rate, timeMs: Math.round(t), dopaL: S.dopa.L });
-  if (recording()) { growth.notePlay(stats(), { mode: S.plan.mode, day: store.dayKey(), timeMs: Math.round(t), dopaL: S.dopa.L, firstRate: rate }); store.save(); }
+  if (recording()) { growth.notePlay(stats(), { mode: S.plan.mode, grade: S.plan.grade, day: store.dayKey(), timeMs: Math.round(t), dopaL: S.dopa.L, firstRate: rate }); store.save(); }
   questNote({ type: 'play', mode: S.plan.mode });
   $('#result-title').textContent = review ? 'ふくしゅう クリア' : `${modeName(S.plan)} クリア`;
   const un = $('#r-unlock');
