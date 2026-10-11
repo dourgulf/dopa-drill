@@ -68,6 +68,14 @@ button:focus-visible { outline: 4px solid var(--yellow); outline-offset: 3px; }
 /* ------------------------------------------------------------ title */
 #screen-title { flex-direction: column; align-items: center; justify-content: flex-start; gap: 14px; padding: calc(28px + env(safe-area-inset-top)) 16px calc(24px + env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; }
 #screen-title > * { flex: none; }
+.game-notes { width: 100%; font-family: "Yu Gothic", sans-serif; font-size: 13px; font-weight: 500; line-height: 1.85; user-select: text; }
+.game-notes summary { padding: 12px 0; cursor: pointer; text-align: center; color: #3a4669; }
+.game-notes summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+.game-notes h2, .game-notes h3 { font-size: 14px; margin: 20px 0 6px; }
+.game-notes p { margin: 8px 0; }
+.game-notes ol { padding-left: 1.5em; }
+.game-notes li + li { margin-top: 8px; }
+.game-notes a { color: #294ba6; }
 /* Logo: layered paper cut-outs. A spinning burst sits behind "ドパ",
    "ドリル" rides on a folded ribbon, operator scraps float around. */
 .logo { position: relative; margin: calc(var(--fs) * 0.62) 0 calc(var(--fs) * 0.2); display: grid; justify-items: center; font-family: var(--chunky); font-weight: 400; line-height: 1; --fs: clamp(64px, 21vw, 96px); }
