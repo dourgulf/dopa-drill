@@ -669,6 +669,8 @@ async function clearProblem() {
   hanamaru(E);
   const lastBasic = !extra && S.qi === S.N - 1;
   celebrate(E, wasReach, lastBasic);
+  // Clearing the last digit of a reach gets a praise band; the words grow with the dopa level.
+  if (wasReach) cutin(praiseWord(E), E);
   const capsuleShown = S.problem.capsule ? capsuleDone(S.problem.capsule) : false;
   if (lastBasic) { if (capsuleShown) await wait(1600); await finale(); return; }
   const run = S.run;
@@ -806,6 +808,19 @@ function crowdLook(i) {
   if (style === 'rainbow') return { pal: ['rainbow', 'gold', 'snow', 'rainbow', 'blue'][i % 5], costume: null };
   if (style === 'twins') return { pal: ul.variant(S.look.color), costume: hero.costume };
   return { pal: CROWD_PALS[i % 5], costume: null };
+}
+
+// Praise words for a reach clear: stronger words as E rises, never the same word twice in a row.
+const PRAISE = [
+  ['いいね！', 'ナイス！', 'せいかい！', 'そのちょうし！'],
+  ['すごい！', 'やったね！', 'バッチリ！', 'いいかんじ！', 'さすが！'],
+  ['てんさい！', 'かんぺき！', 'さいこう！', 'ドパドパ！', 'ちょうすごい！'],
+];
+let lastPraise = '';
+function praiseWord(E) {
+  const list = PRAISE[E >= 0.75 ? 2 : E >= 0.4 ? 1 : 0].filter((w) => w !== lastPraise);
+  lastPraise = list[Math.floor(Math.random() * list.length)];
+  return lastPraise;
 }
 
 function cutin(text, E) {
