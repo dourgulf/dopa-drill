@@ -35,8 +35,9 @@ vec3 classic(vec2 p, float r, float a, float E, float t){
   float tn = smoothstep(.82, 1.08, E);
   if (tn > 0.001) {
     vec2 uv = vec2(a / 6.2832 * 10., 0.32 / (r + .015) + t * (1.2 + .8 * max(0., E - 1.)));
+    // Stagger rows by shifting the tiling itself so each face stays centred in its tile (shifting f cut one ear at the tile edge).
+    uv.x += .5 * mod(floor(uv.y), 2.);
     vec2 cell = floor(uv); vec2 f = fract(uv) - .5;
-    f.x += .5 * mod(cell.y, 2.) - .25;
     float d = dopa(vec2(f.x, -f.y) * 1.1);
     vec3 sc = hsv(fract((cell.x * .11 + cell.y * .17) + t * .25 + uHue), .7, 1.);
     float m = smoothstep(.015, -.015, d) * smoothstep(.02, .22, r);
