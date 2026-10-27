@@ -8,13 +8,16 @@ from urllib.parse import urlsplit
 
 
 class GameHandler(SimpleHTTPRequestHandler):
+    def log_request(self, code='-', size='-'):
+        if urlsplit(self.path).path != '/health':
+            super().log_request(code, size)
+
     def do_GET(self):
         if urlsplit(self.path).path == '/health':
             self.send_response(200)
             self.send_header('Content-Type', 'text/plain; charset=utf-8')
-            self.send_header('Content-Length', '3')
+            self.send_header('Content-Length', '0')
             self.end_headers()
-            self.wfile.write(b'ok\n')
             return
         super().do_GET()
 
@@ -22,7 +25,7 @@ class GameHandler(SimpleHTTPRequestHandler):
         if urlsplit(self.path).path == '/health':
             self.send_response(200)
             self.send_header('Content-Type', 'text/plain; charset=utf-8')
-            self.send_header('Content-Length', '3')
+            self.send_header('Content-Length', '0')
             self.end_headers()
             return
         super().do_HEAD()
