@@ -5,8 +5,8 @@ ENV PYTHONUNBUFFERED=1 \
     PORT=8080
 
 WORKDIR /app
-COPY server.py ./
+COPY tools/server.py ./tools/server.py
 COPY app/ ./app/
 
 EXPOSE 8080
-CMD ["python", "server.py"]
+CMD ["python", "tools/server.py"]

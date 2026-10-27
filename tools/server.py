@@ -29,7 +29,7 @@ class GameHandler(SimpleHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    app_dir = Path(__file__).resolve().parent / 'app'
+    app_dir = Path(__file__).resolve().parent.parent / 'app'
     handler = partial(GameHandler, directory=str(app_dir))
     server = ThreadingHTTPServer(('0.0.0.0', int(os.environ.get('PORT', '8080'))), handler)
     server.serve_forever()

@@ -1,6 +1,7 @@
 **
 !Dockerfile
 !.dockerignore
-!server.py
+!tools/
+!tools/server.py
 !app/
 !app/**
