@@ -1,6 +1,12 @@
-FROM nginx:1.28-alpine
+FROM python:3.13-slim
 
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-COPY app/ /usr/share/nginx/html/
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PORT=8080
+
+WORKDIR /app
+COPY server.py ./
+COPY app/ ./app/
 
 EXPOSE 8080
+CMD ["python", "server.py"]

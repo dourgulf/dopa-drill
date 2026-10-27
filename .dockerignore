@@ -1,6 +1,6 @@
 **
 !Dockerfile
 !.dockerignore
-!nginx.conf
+!server.py
 !app/
 !app/**
