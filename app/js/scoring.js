@@ -54,12 +54,15 @@ const UNITS = [[68, '無量大数'], [64, '不可思議'], [60, '那由他'], [5
 // Milestones below 万 are celebrated but not used as display units.
 const MILESTONES = [[3, '千'], [2, '百']];
 
-export function fmtDopa(L) {
+const UNIT_ZH_CN = { '億': '亿', '穣': '穰', '溝': '沟', '澗': '涧', '載': '载', '極': '极', '不可思議': '不可思议', '無量大数': '无量大数' };
+const displayUnit = (unit, locale) => locale === 'zh-CN' ? (UNIT_ZH_CN[unit] || unit) : unit;
+
+export function fmtDopa(L, locale = 'ja') {
   if (!Number.isFinite(L) || L >= 72) return '∞';
-  if (L < 4) return Math.round(10 ** L).toLocaleString('ja-JP');
+  if (L < 4) return Math.round(10 ** L).toLocaleString(locale === 'zh-CN' ? 'zh-CN' : 'ja-JP');
   const u = UNITS.find(([e]) => L >= e - 1e-9);
   const m = 10 ** (L - u[0]);
-  return (m < 10 ? m.toFixed(1) : String(Math.floor(m))) + u[1];
+  return (m < 10 ? m.toFixed(1) : String(Math.floor(m))) + displayUnit(u[1], locale);
 }
 
 export function unitOf(L) {
@@ -71,4 +74,4 @@ export function unitOf(L) {
 }
 
 const LABELS = { '∞': '∞', 百: '100', 千: '1000', 十万: '10万', 百万: '100万', 千万: '1000万' };
-export const unitLabel = (u) => LABELS[u] || `1${u}`;
+export const unitLabel = (u, locale = 'ja') => LABELS[u] || `1${displayUnit(u, locale)}`;

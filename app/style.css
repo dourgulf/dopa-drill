@@ -20,6 +20,11 @@
   color-scheme: light;
 }
 
+html[lang="zh-CN"] {
+  --round: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --chunky: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+}
+
 * { box-sizing: border-box; }
 html, body { margin: 0; height: 100%; overflow: hidden; }
 body {
@@ -33,7 +38,7 @@ body {
   -webkit-user-select: none;
 }
 button { font: inherit; color: inherit; cursor: pointer; }
-button:focus-visible { outline: 4px solid var(--yellow); outline-offset: 3px; }
+button:focus-visible, select:focus-visible { outline: 4px solid var(--yellow); outline-offset: 3px; }
 
 #paper {
   position: fixed; inset: 0; z-index: 0;
@@ -82,6 +87,7 @@ button:focus-visible { outline: 4px solid var(--yellow); outline-offset: 3px; }
 .logo-burst { position: absolute; left: 50%; top: calc(var(--fs) * 0.52); width: calc(var(--fs) * 2.7); height: calc(var(--fs) * 2.7); transform: translate(-50%, -50%) rotate(calc(var(--spin, 0) * 1deg)); z-index: -1; filter: drop-shadow(0 6px 0 rgba(27, 29, 77, .9)); }
 .logo-top { display: flex; gap: .02em; font-size: var(--fs); letter-spacing: -.04em; }
 .logo i { font-style: normal; display: inline-block; position: relative; }
+.logo i[hidden] { display: none; }
 .logo-top i {
   color: #fff;
   /* white paper edge, ink outline, then an offset second sheet */
@@ -124,6 +130,7 @@ body.reduced .logo *, body.reduced .logo-burst { animation: none !important; }
 .modal-card .big-btn { align-self: center; min-width: 200px; height: 58px; font-size: 24px; }
 .set-row { display: flex; flex-direction: column; gap: 8px; }
 .set-label { font-weight: 900; font-size: 16px; }
+.set-row select { width: 100%; min-height: 44px; padding: 6px 12px; border: 2.5px solid var(--ink); border-radius: 12px; background: #fff; color: var(--ink); font: inherit; font-weight: 900; }
 .set-label b { font-family: var(--chunky); font-weight: 400; color: var(--blue); margin-left: 6px; }
 .set-inline { display: flex; align-items: center; gap: 12px; }
 .set-inline .slider { flex: 1; }
@@ -743,3 +750,5 @@ body.guide-open .logo *, body.guide-open .logo-burst { animation: none !importan
 .guide-help-fallback::after { content: ''; position: absolute; inset: -5px; border: 2px solid var(--yellow); border-radius: 14px; animation: guide-help-pulse 1.4s ease-in-out infinite; }
 @keyframes guide-help-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .45; } }
 body.reduced #guide-help-ring, body.reduced .guide-help-fallback::after { animation: none; }
+
+html[lang="zh-CN"] .node.new::after { content: "新"; }

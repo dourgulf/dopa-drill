@@ -6,6 +6,15 @@ const TREE = { target: '#open-tree', title: 'スキルツリー', text: 'やり�
 const TROPHY = { target: '#open-trophy', title: 'トロフィー', text: 'あそぶと もらえるよ。\nつづけて あそぶと ふえていく' };
 const COLLECTION = { target: '#open-collect', title: 'コレクション', text: 'トロフィーの ごほうびで ふえる\nはいけい・おんがく・きせかえなどを\nえらべるよ' };
 const LAST = { target: '#start', title: 'まよったら じぶんレベル！', text: 'この せつめいは\n？ で また みられるよ', recommend: true };
+const ZH_PAGES = new Map([
+  [INTRO, ['玩法', '题目有三种\n选择方式']],
+  [LEVEL, ['我的水平', '练习适合你当前水平的题目。\n首先进行水平测试']],
+  [GRADES, ['一年级到六年级', '按年级集中练习']],
+  [TREE, ['技能树', '选择一项技能进行练习']],
+  [TROPHY, ['奖杯', '玩游戏就能获得奖杯。\n继续练习可以获得更多']],
+  [COLLECTION, ['收藏', '用奖杯奖励解锁\n背景、音乐和装扮等']],
+  [LAST, ['不知道选什么？试试我的水平！', '点击问号可以\n再次查看这份说明']],
+]);
 const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
 
 // Use measured body + arm bounds. Hard constraints always outrank label coverage.
@@ -24,7 +33,8 @@ export function rankGuideSpots(spots, { obstacles, labels, width, height }) {
   }).sort((a, b) => a.hard - b.hard || a.soft - b.soft);
 }
 
-export function createGuide({ hero, reduced, onClose }) {
+export function createGuide({ hero, reduced, onClose, locale = 'ja' }) {
+  const zh = locale === 'zh-CN';
   const title = document.querySelector('#screen-title');
   const app = document.querySelector('#app');
   const overlay = document.createElement('div');
@@ -46,6 +56,11 @@ export function createGuide({ hero, reduced, onClose }) {
     </section>`;
   document.body.append(overlay);
   const $ = (s) => overlay.querySelector(s);
+  if (zh) {
+    $('#guide-recommend').textContent = '推荐';
+    $('#guide-skip').textContent = '跳过';
+    $('#guide-back').textContent = '返回';
+  }
   const card = $('#guide-card');
   let pages = [], index = 0, active = false, epoch = 0, saved = null, frame = 0;
 
@@ -204,19 +219,19 @@ export function createGuide({ hero, reduced, onClose }) {
     $('#guide-text').textContent = page.text;
     overlay.classList.toggle('guide-last', !!page.recommend);
     if (page.recommend) {
-      $('#guide-text').replaceChildren(document.createTextNode('この せつめいは\n'));
+      $('#guide-text').replaceChildren(document.createTextNode(zh ? '点击 ' : 'この せつめいは\n'));
       const icon = document.createElement('span');
       icon.id = 'guide-help-icon';
       icon.className = 'icon-btn guide-help-icon';
       icon.setAttribute('role', 'img');
-      icon.setAttribute('aria-label', 'あそびかた');
+      icon.setAttribute('aria-label', zh ? '玩法' : 'あそびかた');
       icon.append(document.querySelector('#open-guide svg').cloneNode(true));
-      $('#guide-text').append(icon, document.createTextNode(' で また みられるよ'));
+      $('#guide-text').append(icon, document.createTextNode(zh ? ' 可以再次查看说明' : ' で また みられるよ'));
     }
     $('#guide-dots').innerHTML = pages.map((_, i) => `<i${i === index ? ' class="current"' : ''} aria-hidden="true"></i>`).join('');
-    $('#guide-dots').setAttribute('aria-label', `${pages.length}つのうち ${index + 1}つめ`);
+    $('#guide-dots').setAttribute('aria-label', zh ? `第 ${index + 1} 页，共 ${pages.length} 页` : `${pages.length}つのうち ${index + 1}つめ`);
     $('#guide-back').disabled = index === 0;
-    $('#guide-next').textContent = index === pages.length - 1 ? 'はじめる！' : 'つぎへ';
+    $('#guide-next').textContent = index === pages.length - 1 ? (zh ? '开始！' : 'はじめる！') : (zh ? '下一步' : 'つぎへ');
     layout(true);
     $('#guide-next').focus({ preventScroll: true });
   }
@@ -238,7 +253,8 @@ export function createGuide({ hero, reduced, onClose }) {
   function open({ help = false } = {}) {
     if (active) return;
     saved = { focus: document.activeElement, scroll: title.scrollTop, inert: app.inert, bodyParent: hero.root.parentNode, armsParent: hero.armsFront.parentNode };
-    pages = [INTRO, LEVEL, GRADES, TREE, ...(help ? [TROPHY, COLLECTION] : []), LAST];
+    pages = [INTRO, LEVEL, GRADES, TREE, ...(help ? [TROPHY, COLLECTION] : []), LAST]
+      .map((page) => zh ? { ...page, title: ZH_PAGES.get(page)[0], text: ZH_PAGES.get(page)[1] } : page);
     index = 0; active = true;
     overlay.hidden = false;
     document.body.classList.add('guide-open');

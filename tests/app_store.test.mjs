@@ -23,6 +23,20 @@ test('defaults when storage is empty, corrupted, or throwing', () => {
   assert.equal(store.save(bad), false);
 });
 
+test('language preference survives a reload and legacy settings retain defaults', () => {
+  const mem = memory({ 'dopa-drill:v1': JSON.stringify({ version: 1, settings: { count: 6 }, history: [] }) });
+  store.reset(null);
+  globalThis.localStorage = mem;
+  assert.equal(store.load(mem).settings.locale, null);
+  assert.equal(store.settings().count, 6);
+  store.updateSettings({ locale: 'zh-CN' });
+  store.reset(null);
+  assert.equal(store.load(mem).settings.locale, 'zh-CN');
+  assert.equal(store.settings().count, 6);
+  store.reset(null);
+  delete globalThis.localStorage;
+});
+
 test('records group by day with best score and streak', () => {
   store.reset();
   const mem = memory();

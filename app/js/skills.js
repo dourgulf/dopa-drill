@@ -1,6 +1,7 @@
 // Skill tree for grades 1-6 (calculation only). See docs/curriculum.md.
 // Each skill: id, name (shown on screen), grade, lane (tree column),
 // req (all must be mastered to unlock), gen (generator + params, problems.js).
+import { SKILL_NAMES_ZH_CN, LANE_NAMES_ZH_CN } from './locales/skills-zh-CN.js';
 
 export const LANES = ['たし・ひき', 'かけ・わり', '小数・分数', 'そのほか'];
 
@@ -80,6 +81,17 @@ export const SKILLS = [
 ];
 
 export const SKILL = Object.fromEntries(SKILLS.map((s) => [s.id, s]));
+
+// Keep stored skill IDs and the Japanese source data independent of the UI locale.
+export function skillName(id, locale = 'ja') {
+  const skill = SKILL[id];
+  if (!skill) return '';
+  return locale === 'zh-CN' ? (SKILL_NAMES_ZH_CN[id] ?? skill.name) : skill.name;
+}
+
+export function laneName(index, locale = 'ja') {
+  return (locale === 'zh-CN' ? LANE_NAMES_ZH_CN[index] : LANES[index]) ?? '';
+}
 
 // Depth in the tree = longest prerequisite chain (roots are 0).
 export const DEPTH = (() => {

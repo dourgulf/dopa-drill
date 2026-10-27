@@ -3,7 +3,7 @@
 // date (so it is the same all day) and from what this child can do today.
 // Pure logic; main.js feeds play events and saves the state.
 
-import { SKILL } from './skills.js';
+import { SKILL, skillName } from './skills.js';
 
 export const QUEST_MINUTES = 15;
 
@@ -89,7 +89,17 @@ export function dailyQuests(day, ctx) {
   return ['play1', 'combo5', 'play2'].map((id) => ({ id, goal: QUEST[id].goal, prog: 0, done: false }));
 }
 
-export const questText = (q) => { const d = questDef(q); return d ? d.text(q) : ''; };
+const QUEST_ZH_CN = {
+  play1: '玩1次', combo5: '达成5连击', first5: '首次答对5题', review1: '复习1题',
+  new1: '练习1道新技能题', extra: '进入加练', extra5: '在加练中答对5题',
+  combo20: '达成20连击', play2: '玩2次', grade1: '按年级玩1次', learn10: '练习10道新技能或学习中技能的题目',
+};
+export const questText = (q, locale = 'ja') => {
+  const d = questDef(q);
+  if (!d) return '';
+  if (locale === 'zh-CN') return q.id === 'polish' ? `复习「${skillName(q.skill, locale)}」，首次答对3题` : (QUEST_ZH_CN[q.id] ?? d.text(q));
+  return d.text(q);
+};
 
 // The saved state keeps today's list; a new day brings a new one.
 export function ensureDay(state, day, ctx) {
