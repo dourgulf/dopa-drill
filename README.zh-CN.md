@@ -30,6 +30,8 @@ python3 -m http.server 8000 -d app
 
 ## 测试
 
+Cloudflare Pages 发布配置见 [部署说明](docs/cloudflare-pages.md)。发布命令为 `node tools/build_pages.mjs`，输出目录为 `dist`，自动使用分配的 `pages.dev` 域名生成搜索元数据。
+
 使用 Node.js 20 或更高版本运行：
 
 ```bash

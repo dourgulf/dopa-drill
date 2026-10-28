@@ -28,6 +28,8 @@ python3 -m http.server 8000 -d app
 
 ブラウザで `http://localhost:8000/` を開いてください。ES Modulesを使っているため、`file://` で直接開くと動きません。
 
+Cloudflare Pages への公開手順は [デプロイガイド](docs/cloudflare-pages.md) を参照してください。Build command は `node tools/build_pages.mjs`、出力先は `dist` です。割り当てられた `pages.dev` ドメインから検索用メタデータを生成します。
+
 ## テスト
 
 Node.js 20以上で実行します。
